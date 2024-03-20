@@ -1,31 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.IO;
 using UnityEngine;
+using static Character;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GameManager : MonoBehaviour
 {
-    public Deck deck;
+    public List<Player> players;
+    public List<Monster> monsters;
+    public Boss boss;
+
     void Start()
     {
-        InitializeDeck_();
+        InitializeGame();
+        SaveGameDataToCSV();
     }
 
-    // 덱 초기화 메서드
-    void InitializeDeck_()
+    void InitializeGame()
     {
-        if (deck == null)
+        players = new List<Player>
         {
-            Debug.LogError("덱이 할당되지 않았습니다!");
-            return;
-        }
+            new Player("Player1", 100, 20, 10, 5),
+            new Player("Player2", 120, 18, 12, 7),
+            new Player("Player3", 80, 25, 8, 6)
+        };
 
-        Debug.Log("덱이 초기화되었습니다.");
+        monsters = new List<Monster>
+        {
+            new Monster("Monster1", 80, 15, 5, 4),
+            new Monster("Monster2", 100, 12, 8, 3),
+            new Monster("Monster3", 120, 10, 10, 2)
+        };
+
+        boss = new Boss("Boss", 200, 30, 20, 8);
     }
 
-    // Update() 메서드는 필요에 따라 추가하여 사용
-    void Update()
+    void SaveGameDataToCSV()
     {
-        // 필요한 경우 게임 로직 업데이트
+        string filePath = Application.dataPath + "/GameData.csv";
+        StreamWriter writer = new StreamWriter(filePath);
+
+        WriteCharacterDataToCSV(players, writer);
+        WriteCharacterDataToCSV(monsters, writer);
+        WriteCharacterDataToCSV(new List<Character> { boss }, writer);
+
+        writer.Close();
+        Debug.Log("게임 데이터가 CSV 파일로 저장되었습니다.");
+    }
+
+    void WriteCharacterDataToCSV(List<Character> characters, StreamWriter writer)
+    {
+        foreach (Character character in characters)
+        {
+            string data = $"{character.Name},{character.Health},{character.Attack},{character.Defense},{character.Speed}";
+            writer.WriteLine(data);
+        }
     }
 }
