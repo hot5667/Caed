@@ -22,13 +22,14 @@ public class Deck : MonoBehaviour
     public class CustomDeck
     {
         private List<Card> cards;
-
+        private System.Random random;
         public CustomDeck()
         {
+            random = new System.Random();
             InitializeDeck();
         }
 
-        private void InitializeDeck()
+        public void InitializeDeck()
         {
             cards = new List<Card>();
 
@@ -71,7 +72,7 @@ public class Deck : MonoBehaviour
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
+                int k = random.Next(n + 1);
                 Card value = cards[k];
                 cards[k] = cards[n];
                 cards[n] = value;

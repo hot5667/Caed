@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Deck deck;
+    private List<Card> deck;
+
+    void Start()
+    {
+        deck = new List<Card>();
+    }
 
     public void AddCardToDeck(Card newCard)
     {
-        deck.AddCard(newCard);
+        deck.Add(newCard);
     }
 }
